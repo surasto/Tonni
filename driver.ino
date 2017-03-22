@@ -54,22 +54,75 @@ void tonniSteer(int steerDir) {
   if(steerDir == STEER_RIGHT) targetVal = 250;
   if(steerDir == STEER_STRAIGHT) targetVal = 500;
   
+  potVal = analogRead(POTI);
+  delta = potVal - targetVal;
+  
+  if(delta <= 0){
+      digitalWrite(STEER_A, HIGH);
+      digitalWrite(STEER_B, LOW);
+      Serial.println("---  >0   ----");
+  } 
+  if(delta > 0){
+      digitalWrite(STEER_A, LOW);
+      digitalWrite(STEER_B, HIGH);
+      Serial.println("---- <0 -------");
+  }
+
   do{
     potVal = analogRead(POTI);
 
     delta = potVal - targetVal;
     Serial.println(delta);
-    
-    if(delta < -10){
-      digitalWrite(STEER_A, HIGH);
-      digitalWrite(STEER_B, LOW);
-    } else if(delta > 10){
-      digitalWrite(STEER_A, LOW);
-      digitalWrite(STEER_B, HIGH);
-    } else{
-      digitalWrite(STEER_A, LOW);
-      digitalWrite(STEER_B, LOW);
-    }
   } while(abs(delta)>10);
+  
+  digitalWrite(STEER_A, LOW);
+  digitalWrite(STEER_B, LOW);
+    
 }
+
+//========================================================
+//  getDist(dir)
+//  measures Distance via ultra sonic sensor
+//  dir = DIST_FRONT | DIST_RIGHT | DIST_LEFT | DIST_BACK
+//========================================================
+int getDist(int dir) {
+  long duration, cm;
+  int pingPin; 
+  int start_signal;
+
+  if (dir == DIST_FRONT) {
+    pingPin = 10;
+    start_signal = 11;
+  } else if (dir == DIST_RIGHT) {
+    pingPin = 8;
+    start_signal = 9;
+  } else if (dir == DIST_LEFT) {
+    pingPin = 12;
+    start_signal = 13; 
+  } else return (-1);
+ 
+
+  pinMode(pingPin,OUTPUT);     // Pins vorbereiten
+  pinMode(start_signal,OUTPUT);
+  digitalWrite(start_signal,HIGH);
+  delayMicroseconds(20);
+
+  digitalWrite(start_signal,LOW);  // Starte Messung mit fallender Flanke
+  digitalWrite(pingPin,LOW);
+  delayMicroseconds(2);
+  digitalWrite(pingPin,HIGH);
+  delayMicroseconds(5);
+  digitalWrite(pingPin,LOW);
+  pinMode(pingPin,INPUT);
+
+  duration = pulseIn(pingPin,HIGH);  // Messung der Verzögerung bis Echo
+  cm = duration / 29 / 2 ;
+  
+  Serial.print(cm);        // Nur für Debug
+  Serial.println("cm");
+  delay(50);
+  return cm;
+}
+  
+
 

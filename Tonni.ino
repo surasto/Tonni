@@ -7,17 +7,21 @@
 void setup() {
   Serial.begin(9600);
   tonniInit();
+  tonniSteer (STEER_STRAIGHT);
+
 }
 
 void loop() {
-  delay(500);
-  tonniSteer(STEER_STRAIGHT);
-  delay(2000);
-  tonniSteer(STEER_RIGHT);
-  delay(2000);
-  tonniDrive(FORWARD);
-  delay(2000);
-  tonniSteer(STEER_LEFT);
-  delay(2000);
-  tonniDrive(BACKWARD);
+  int dist;
+  int go;
+
+//  if ((getDist(DIST_LEFT)>20)&&(getDist(DIST_RIGHT)>20)&&(getDist(DIST_FRONT)>20)) go = FORWARD;
+//  else go = STOP;
+   tonniDrive (FORWARD);
+
+//  Serial.println(go);
+//  tonniDrive(go);
+  delay (5000);
 }
+
+ 
