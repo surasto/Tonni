@@ -1,4 +1,4 @@
-// Common Defines
+// Common Defines for Motordrivers
 
 #define FORWARD 1
 #define BACKWARD -1

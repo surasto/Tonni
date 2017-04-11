@@ -1,0 +1,18 @@
+// Common defines for sound module
+
+#define sendPin 7
+
+#define KEY_PAUSE "00100010110111011"
+#define KEY_RPT   "10011000011001111"
+#define KEY_1     "00110000110011111"
+#define KEY_2     "00011000111001111"
+#define KEY_3     "01111010100001011"
+#define KEY_4     "00010000111011111"
+#define KEY_5     "00111000110001111"
+#define KEY_6     "01011010101001011"
+#define KEY_7     "01000010101111011"
+#define KEY_8     "01001010101101011"
+#define KEY_9     "01010010101011011" 
+
+#define SOUND_DRIVE KEY_3
+#define SOUND_STEER KEY_1

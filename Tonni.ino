@@ -3,20 +3,44 @@
 // CC-BY SA NC surasto.de  2017
 
 #include "driver.h"
+#include "sound.h"
 
 void setup() {
   Serial.begin(9600);
   tonniInit();
-  tonniSteer (STEER_STRAIGHT);
-   //tonniDrive (BACKWARD);
+  soundInit();
+
+  delay(3000);
+ // tonniSteer (STEER_STRAIGHT);
+  soundCommand(KEY_RPT);
 }
 
 void loop() {
   int dist;
-  int go;
+  int c;
+  
+  if (Serial.available()>0) {
+    c = Serial.read();
+    switch (c) {
+      case 'p': soundCommand(KEY_PAUSE); break;
+      case '1': soundCommand(KEY_1); break; 
+      case '2': soundCommand(KEY_2); break; 
+      case '3': soundCommand(KEY_3); break; 
+      case '4': soundCommand(KEY_4); break; 
+      case '5': soundCommand(KEY_5); break; 
+      case '6': soundCommand(KEY_6); break; 
+      case '7': soundCommand(KEY_7); break; 
+      case '8': soundCommand(KEY_8); break; 
+      case '9': soundCommand(KEY_9); break; 
+    } 
+  }
+
 
   if (getDist(DIST_FRONT)<50) tonniDrive(STOP);
-  else tonniDrive(FORWARD);
+  else {
+//    soundCommand(SOUND_DRIVE);
+    tonniDrive(FORWARD);
+  }
 
   if (getDist(DIST_RIGHT)<20) {
     tonniDrive(STOP);
