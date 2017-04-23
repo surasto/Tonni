@@ -13,4 +13,9 @@
 #define DIST_LEFT  2
 #define DIST_BACK  3
 
+#define LOOK_STRAIGHT 0
+#define LOOK_LEFT -1
+#define LOOK_RIGHT 1
 
+#define OPEN 1
+#define CLOSE 0

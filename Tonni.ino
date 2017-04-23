@@ -10,9 +10,27 @@ void setup() {
   tonniInit();
   soundInit();
 
+  // All Functions get Tested here
+  soundCommand(SOUND_STARTUP);
   delay(3000);
- // tonniSteer (STEER_STRAIGHT);
-  soundCommand(KEY_RPT);
+  tonniSteer(STEER_RIGHT);
+  delay(500);
+  tonniSteer(STEER_STRAIGHT);
+  delay(500);
+  tonniSteer(STEER_LEFT);
+  eyes(LOOK_LEFT);
+  delay(1000);
+  eyes(LOOK_STRAIGHT);
+  delay(1000);
+  eyes(LOOK_RIGHT);
+  delay(1000);
+  eyes(LOOK_STRAIGHT);
+  delay(1000);
+  lid(OPEN);
+  delay(1000);
+  lid(CLOSE);
+  delay(500); 
+  soundCommand(KEY_PAUSE); 
 }
 
 void loop() {
@@ -34,7 +52,6 @@ void loop() {
       case '9': soundCommand(KEY_9); break; 
     } 
   }
-
 
   if (getDist(DIST_FRONT)<50) tonniDrive(STOP);
   else {

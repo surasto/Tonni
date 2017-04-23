@@ -1,6 +1,6 @@
 // Common defines for sound module
 
-#define sendPin 7
+#define sendPin A4
 
 #define KEY_PAUSE "00100010110111011"
 #define KEY_RPT   "10011000011001111"
@@ -16,3 +16,4 @@
 
 #define SOUND_DRIVE KEY_3
 #define SOUND_STEER KEY_1
+#define SOUND_STARTUP KEY_1

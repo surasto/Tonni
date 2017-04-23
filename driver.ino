@@ -1,11 +1,16 @@
 // Tonni Drivers
 #include "driver.h"
+#include <Servo.h>
 
 #define DRIVE_A A0
 #define DRIVE_B A1
 #define STEER_A A2
 #define STEER_B A3
 #define POTI A5
+
+
+  Servo eyeServo;   // Create ServoObjects
+  Servo lidServo;
 
 void tonniInit() {
   //Control Outputs
@@ -22,6 +27,11 @@ void tonniInit() {
 
   //Steering Feedback
   pinMode(POTI, INPUT);
+
+  eyeServo.attach(2);
+  lidServo.attach(3);
+  eyeServo.writeMicroseconds(1600);  // set servo to mid-point
+  lidServo.writeMicroseconds(2100);  // set servo to mid-point
 }
 
 //======================================
@@ -86,22 +96,34 @@ void tonniSteer(int steerDir) {
 //  dir = DIST_FRONT | DIST_RIGHT | DIST_LEFT | DIST_BACK
 //========================================================
 int getDist(int dir) {
-  long duration, cm;
-  int pingPin; 
-  int start_signal;
-
+  int cm, cm1, cm2;
+  
   if (dir == DIST_FRONT) {
-    pingPin = 10;
-    start_signal = 11;
+    cm1 = distMeasure(10,11);
+    //Serial.print("cm1 = "); Serial.println(cm1);
+    cm2 = distMeasure(4,5);
+    //Serial.print("cm2 = "); Serial.println(cm2);
+    if (cm1<cm2) cm = cm1; else cm=cm2;
+       
   } else if (dir == DIST_RIGHT) {
-    pingPin = 8;
-    start_signal = 9;
+    cm = distMeasure(8,9);
+    
   } else if (dir == DIST_LEFT) {
-    pingPin = 12;
-    start_signal = 13; 
-  } else return (-1);
- 
+    cm = distMeasure(12,13);
 
+  } else if (dir == DIST_BACK) {
+    cm = distMeasure(6,7);
+    
+  } else return (-1);
+
+  return(cm);
+}
+  
+int distMeasure(int pingPin, int start_signal) {
+
+  long duration;
+  long cm;
+  
   pinMode(pingPin,OUTPUT);     // Pins vorbereiten
   pinMode(start_signal,OUTPUT);
   digitalWrite(start_signal,HIGH);
@@ -118,11 +140,21 @@ int getDist(int dir) {
   duration = pulseIn(pingPin,HIGH);  // Messung der Verzögerung bis Echo
   cm = duration / 29 / 2 ;
   
-  Serial.print(cm);        // Nur für Debug
-  Serial.println("cm");
+  //Serial.print(cm);        // Nur für Debug
+  //Serial.println("cm");
   delay(50);
   return cm;
 }
-  
+
+void eyes(int dir) {
+  if (dir == LOOK_RIGHT) eyeServo.writeMicroseconds(1900);
+  else if (dir == LOOK_LEFT) eyeServo.writeMicroseconds(1300);
+  else eyeServo.writeMicroseconds(1600);
+}
+
+void lid(int dir) {
+  if (dir == OPEN) lidServo.writeMicroseconds(800);
+  if (dir == CLOSE) lidServo.writeMicroseconds(2100);
+}
 
 
