@@ -9,6 +9,7 @@ void setup() {
   Serial.begin(9600);
   tonniInit();
   soundInit();
+  delay(500);
 
   // All Functions get Tested here
   soundCommand(SOUND_STARTUP);
@@ -30,7 +31,7 @@ void setup() {
   delay(1000);
   lid(CLOSE);
   delay(500); 
-  soundCommand(KEY_PAUSE); 
+  soundCommand(SOUND_SILENCE); 
 }
 
 void loop() {
