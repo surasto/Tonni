@@ -9,29 +9,45 @@ void setup() {
   Serial.begin(9600);
   tonniInit();
   soundInit();
-  delay(500);
+  delay(5000);
+
+  tonniDrive(STOP);
 
   // All Functions get Tested here
-  soundCommand(SOUND_STARTUP);
-  delay(3000);
+  soundCommand(KEY_1);  // Sound #1 = Startup
+  Serial.println("Sound Started");
+  delay(1000);
   tonniSteer(STEER_RIGHT);
+  Serial.println("Steer Right");
   delay(500);
   tonniSteer(STEER_STRAIGHT);
+  Serial.println("Steer Straight");
   delay(500);
   tonniSteer(STEER_LEFT);
+  Serial.println("Steer Left");
   eyes(LOOK_LEFT);
+  Serial.println("Look Left");
   delay(1000);
   eyes(LOOK_STRAIGHT);
+  Serial.println("Look Straight");
   delay(1000);
   eyes(LOOK_RIGHT);
+  Serial.println("Look Right");
   delay(1000);
   eyes(LOOK_STRAIGHT);
+  Serial.println("Look Straight");
   delay(1000);
   lid(OPEN);
+  Serial.println("Open Mouth");
   delay(1000);
   lid(CLOSE);
+  Serial.println("Close Mouth");
   delay(500); 
-  soundCommand(SOUND_SILENCE); 
+  soundCommand(KEY_RPT);
+  delay(100);
+  soundCommand(KEY_2);   // Sound #2 = Drive
+  Serial.println("Sound Stopped");
+  delay(200);
 }
 
 void loop() {
@@ -54,27 +70,65 @@ void loop() {
     } 
   }
 
-  if (getDist(DIST_FRONT)<50) tonniDrive(STOP);
-  else {
-//    soundCommand(SOUND_DRIVE);
+  if (getDist(DIST_FRONT)>50) { 
     tonniDrive(FORWARD);
+    if (getDriveDir() != FORWARD) { 
+       soundCommand(KEY_2);   // Sound #2 = Drive
+    }
+  } else {
+    if (getDriveDir() != BACKWARD) {
+      soundCommand(KEY_5);   // Sound #5 = Backwards (spare)
+      tonniDrive(STOP);
+      lid(OPEN);
+      delay(2000);
+      lid(CLOSE);
+      eyes(LOOK_LEFT);
+      delay(500);
+      eyes(LOOK_STRAIGHT);
+      delay(500);
+      eyes(LOOK_RIGHT);
+      delay(500);
+      eyes(LOOK_STRAIGHT);
+      if (getDist(DIST_LEFT) > getDist(DIST_RIGHT)) {
+        eyes(LOOK_RIGHT);
+        tonniSteer(STEER_RIGHT); 
+      }
+      else {
+        eyes(LOOK_LEFT);
+        tonniSteer(STEER_LEFT);
+      }
+      tonniDrive(BACKWARD);
+      while ((getDist(DIST_BACK)  >50) && 
+             (getDist(DIST_LEFT)  >20) && 
+             (getDist(DIST_RIGHT) >20) && 
+             (getDist(DIST_FRONT) <200)) { 
+                delay(50); 
+                Serial.println(getDist(DIST_BACK)); 
+              }
+      tonniDrive(STOP);
+      eyes(LOOK_STRAIGHT);
+      tonniSteer(STEER_STRAIGHT);
+    }
   }
 
-  if (getDist(DIST_RIGHT)<20) {
-    tonniDrive(STOP);
-    tonniSteer(STEER_LEFT);
-    tonniDrive(FORWARD);
-    while (getDist (DIST_RIGHT)<30) delay(10);
-    tonniDrive(STOP);
-    tonniSteer(STEER_STRAIGHT);
+  if (getDist(DIST_RIGHT)<30) {
+    if (getSteerDir() != STEER_LEFT) {
+        tonniDrive(STOP);
+        eyes(LOOK_LEFT);
+        tonniSteer(STEER_LEFT);
+    }
   }
   
-  else if (getDist(DIST_LEFT)<20) {
-    tonniDrive(STOP);
-    tonniSteer(STEER_RIGHT);
-    tonniDrive(FORWARD);
-    while (getDist (DIST_LEFT)<30) delay(10);
-    tonniDrive(STOP);
+  if (getDist(DIST_LEFT)<30) {
+    if (getSteerDir() != STEER_RIGHT) {
+      tonniDrive(STOP);
+      eyes(LOOK_RIGHT);
+      tonniSteer(STEER_RIGHT);
+    }
+  }
+
+  if ((getDist(DIST_LEFT)>40) && (getDist(DIST_RIGHT)>40)) {
+    eyes(LOOK_STRAIGHT);
     tonniSteer(STEER_STRAIGHT);
   }
 

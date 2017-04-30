@@ -8,6 +8,8 @@
 #define STEER_B A3
 #define POTI A5
 
+  int driveDirection;        // Holds drive direction 
+  int steerDirection;
 
   Servo eyeServo;   // Create ServoObjects
   Servo lidServo;
@@ -49,6 +51,7 @@ void tonniDrive(int driveDir) {
     digitalWrite(DRIVE_A, LOW);
     digitalWrite(DRIVE_B, LOW);
   }
+  driveDirection = driveDir;
 }
 
 //======================================
@@ -70,24 +73,33 @@ void tonniSteer(int steerDir) {
   if(delta <= 0){
       digitalWrite(STEER_A, HIGH);
       digitalWrite(STEER_B, LOW);
-      Serial.println("---  >0   ----");
+//      Serial.println("---  >0   ----");
   } 
   if(delta > 0){
       digitalWrite(STEER_A, LOW);
       digitalWrite(STEER_B, HIGH);
-      Serial.println("---- <0 -------");
+//      Serial.println("---- <0 -------");
   }
 
   do{
     potVal = analogRead(POTI);
 
     delta = potVal - targetVal;
-    Serial.println(delta);
+  //  Serial.println(delta);
   } while(abs(delta)>10);
   
   digitalWrite(STEER_A, LOW);
   digitalWrite(STEER_B, LOW);
-    
+
+  steerDirection = steerDir;
+}
+
+int getSteerDir() {
+  return steerDirection;
+}
+
+int getDriveDir() {
+  return driveDirection;
 }
 
 //========================================================
