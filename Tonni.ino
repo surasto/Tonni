@@ -14,9 +14,15 @@ void setup() {
   tonniDrive(STOP);
 
   // All Functions get Tested here
-  soundCommand(KEY_1);  // Sound #1 = Startup
+  soundCommand(KEY_2);  // Sound #1 = Hallo
   Serial.println("Sound Started");
-  delay(1000);
+  delay(1500);
+  lid(OPEN);
+  Serial.println("Open Mouth");
+  delay(3000);
+  lid(CLOSE);
+  Serial.println("Close Mouth");
+  delay(100); 
   tonniSteer(STEER_RIGHT);
   Serial.println("Steer Right");
   delay(500);
@@ -37,15 +43,7 @@ void setup() {
   eyes(LOOK_STRAIGHT);
   Serial.println("Look Straight");
   delay(1000);
-  lid(OPEN);
-  Serial.println("Open Mouth");
-  delay(1000);
-  lid(CLOSE);
-  Serial.println("Close Mouth");
-  delay(500); 
-  soundCommand(KEY_RPT);
-  delay(100);
-  soundCommand(KEY_2);   // Sound #2 = Drive
+  soundCommand(KEY_1);   // Sound #1 = Drive
   Serial.println("Sound Stopped");
   delay(200);
 }
@@ -73,14 +71,15 @@ void loop() {
   if (getDist(DIST_FRONT)>50) { 
     tonniDrive(FORWARD);
     if (getDriveDir() != FORWARD) { 
-       soundCommand(KEY_2);   // Sound #2 = Drive
+       soundCommand(KEY_1);   // Sound #1 = Drive
     }
   } else {
     if (getDriveDir() != BACKWARD) {
-      soundCommand(KEY_5);   // Sound #5 = Backwards (spare)
+      soundCommand(KEY_5);   // Sound #5 = Speach
       tonniDrive(STOP);
+      delay(500);
       lid(OPEN);
-      delay(2000);
+      delay(3000);
       lid(CLOSE);
       eyes(LOOK_LEFT);
       delay(500);
@@ -98,6 +97,7 @@ void loop() {
         tonniSteer(STEER_LEFT);
       }
       tonniDrive(BACKWARD);
+      soundCommand(KEY_1);   // Sound #1 = Drive
       while ((getDist(DIST_BACK)  >50) && 
              (getDist(DIST_LEFT)  >20) && 
              (getDist(DIST_RIGHT) >20) && 
