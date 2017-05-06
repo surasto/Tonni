@@ -166,7 +166,7 @@ void eyes(int dir) {
 
 void lid(int dir) {
   if (dir == OPEN) lidServo.writeMicroseconds(800);
-  if (dir == CLOSE) lidServo.writeMicroseconds(2100);
+  if (dir == CLOSE) lidServo.writeMicroseconds(1900);
 }
 
 
