@@ -8,6 +8,7 @@
 boolean activeDrive;   // This variable hold the drive state. If false none of teh motors are activated
 unsigned long lastAction;
 unsigned long lastSpeach;
+unsigned long timeStamp;
 
 void setup() {
   int i, dist;
@@ -101,6 +102,16 @@ void loop() {
   if (activeDrive == true) {          // This part will be executed when motors are enabled
     if (getDist(DIST_FRONT)>50) { 
       tonniDrive(FORWARD);
+      if (millis() > lastAction + 6000 + random(5000)) {
+        eyes(LOOK_LEFT);
+        delay(500);
+        eyes(LOOK_STRAIGHT);
+        delay(500);
+        eyes(LOOK_RIGHT);
+        delay(500);
+        eyes(LOOK_STRAIGHT);
+        lastAction = millis();
+      }
       if (getDriveDir() != FORWARD) { 
          soundCommand(KEY_2);   // Sound #2 = Drive
       }
@@ -127,11 +138,13 @@ void loop() {
           tonniSteer(STEER_LEFT);
         }
         tonniDrive(BACKWARD);
-        soundCommand(KEY_1);   // Sound #1 = Drive
+        soundCommand(KEY_2);   // Sound #2 = Drive
+        timeStamp =millis();
         while ((getDist(DIST_BACK)  >50) && 
                (getDist(DIST_LEFT)  >20) && 
                (getDist(DIST_RIGHT) >20) && 
-               (getDist(DIST_FRONT) <200)) { 
+               (getDist(DIST_FRONT) <80) &&
+               (millis() < timeStamp + 8000)) { 
                   delay(50); 
                   Serial.println(getDist(DIST_BACK)); 
                 }
@@ -163,7 +176,7 @@ void loop() {
     }
   } else { // this part will be executed when motors are disabled
     
-    if ((getDist(DIST_FRONT) < 50) && (millis() > lastSpeach + 15000)) {
+    if (((getDist(DIST_FRONT) < 80) && (millis() > lastSpeach + 15000)) || (millis() > lastSpeach + 30000)) {
       eyes(LOOK_LEFT);
       delay(500);
       eyes(LOOK_STRAIGHT);
@@ -182,7 +195,7 @@ void loop() {
       lastSpeach = millis();
     }
 
-    if (millis() > lastAction + 10000 + random(20000)) {
+    if (millis() > lastAction + 6000 + random(5000)) {
       eyes(LOOK_LEFT);
       delay(500);
       eyes(LOOK_STRAIGHT);
