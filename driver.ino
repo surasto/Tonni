@@ -2,11 +2,11 @@
 #include "driver.h"
 #include <Servo.h>
 
-#define DRIVE_A A0
-#define DRIVE_B A1
-#define STEER_A A2
-#define STEER_B A3
-#define POTI A5
+#define DRIVE_A 13
+#define DRIVE_B 12
+#define STEER_A 9
+#define STEER_B 8
+#define POTI A0
 
   int driveDirection;        // Holds drive direction 
   int steerDirection;
@@ -30,8 +30,8 @@ void tonniInit() {
   //Steering Feedback
   pinMode(POTI, INPUT);
 
-  eyeServo.attach(2);
-  lidServo.attach(3);
+  eyeServo.attach(A3);
+  lidServo.attach(A4);
   eyeServo.writeMicroseconds(1600);  // set servo to mid-point
   lidServo.writeMicroseconds(2100);  // set servo to mid-point
 }
@@ -111,20 +111,23 @@ int getDist(int dir) {
   int cm, cm1, cm2;
   
   if (dir == DIST_FRONT) {
-    cm1 = distMeasure(10,11);
-    //Serial.print("cm1 = "); Serial.println(cm1);
-    cm2 = distMeasure(4,5);
-    //Serial.print("cm2 = "); Serial.println(cm2);
+    cm1 = distMeasure(3,2);
+    Serial.print("cm1 = "); Serial.println(cm1);
+    cm2 = distMeasure(5,4);
+    Serial.print("cm2 = "); Serial.println(cm2);
     if (cm1<cm2) cm = cm1; else cm=cm2;
        
   } else if (dir == DIST_RIGHT) {
-    cm = distMeasure(8,9);
+    cm = distMeasure(7,6);
+    Serial.print("cm = "); Serial.println(cm);
     
   } else if (dir == DIST_LEFT) {
-    cm = distMeasure(12,13);
+    cm = distMeasure(11,10);
+    Serial.print("cm = "); Serial.println(cm);
 
   } else if (dir == DIST_BACK) {
-    cm = distMeasure(6,7);
+    cm = distMeasure(A2,A1);
+    Serial.print("cm = "); Serial.println(cm);
     
   } else return (-1);
 

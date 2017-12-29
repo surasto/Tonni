@@ -2,6 +2,9 @@
 // Testsoftware for the driving trashbin
 // CC-BY SA NC surasto.de  2017
 
+// Rev 0.9 for c-trone board
+// New Pin assignments
+
 #include "driver.h"
 #include "sound.h"
 
@@ -17,11 +20,44 @@ void setup() {
   tonniInit();
   soundInit();
 
+
+/*############# LOW LEVEL DEBUGING ######################
+  Serial.println("==== Motor Test ======");
+  tonniDrive(FORWARD);
+  delay(2000);
+  tonniDrive(BACKWARD);
+  delay(1000);
+  tonniDrive(STOP);
+  delay(1000);  
+
+  tonniSteer(STEER_RIGHT);
+  Serial.println("Steer Right");
+  delay(500);
+  tonniSteer(STEER_STRAIGHT);
+  Serial.println("Steer Straight");
+  delay(500);
+  tonniSteer(STEER_LEFT);
+  Serial.println("Steer Left");  
+     
+  Serial.println("==== Sensor Test ======");
+  for (int j=0; j<20; j++) {
+     Serial.print("FRONT: ");
+     getDist(DIST_FRONT);
+     Serial.print("RIGHT: ");
+     getDist(DIST_RIGHT);
+     Serial.print("LEFT: ");
+     getDist(DIST_LEFT);
+     Serial.print("BACK: ");
+     getDist(DIST_BACK);
+     delay(100);
+}
+//##################################################*/
+  
   delay(200);
   dist = getDist(DIST_FRONT);  // Dummy Call - first call is sometimes wrong;
   dist = 0;
   for (i = 0; i<10; i++) dist += getDist(DIST_FRONT);
-  if (dist < 200) activeDrive = false; else activeDrive = true;   // Distance in average < 20cm
+  if (dist < 250) activeDrive = false; else activeDrive = true;   // Distance in average < 20cm
 
   delay(2000);
 
